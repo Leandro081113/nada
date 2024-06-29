@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Productos</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <h1>Productos</h1>
+    <ul id="productos-list"></ul>
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('/api/productos')
+                .then(response => response.json())
+                .then(productos => {
+                    const productosList = document.getElementById('productos-list');
+                    productos.forEach(producto => {
+                        const li = document.createElement('li');
+                        li.textContent = `${producto.nombre} - ${producto.precio_venta}€ - ${producto.tipo}`;
+                        productosList.appendChild(li);
+                    });
+                });
+        });
+    </script>
+</body>
+</html>
