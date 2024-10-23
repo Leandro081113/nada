@@ -1,0 +1,120 @@
+CREATE DATABASE MundoPokemon_DB;
+USE MundoPokemon_DB;
+
+-- Tabla: Habilidades
+CREATE TABLE Habilidades (
+    Id INT PRIMARY KEY AUTO_INCREMENT,
+    Nombre VARCHAR(100) NOT NULL,
+    Descripcion TEXT,
+    IdTipo INT
+);
+
+-- Tabla: Elementos
+CREATE TABLE Elementos (
+    Id INT PRIMARY KEY AUTO_INCREMENT,
+    Descripcion VARCHAR(100) NOT NULL
+);
+
+-- Tabla: Pokemons
+CREATE TABLE Pokemons (
+    Id INT PRIMARY KEY AUTO_INCREMENT,
+    Nombre VARCHAR(100) NOT NULL,
+    Numero INT NOT NULL,
+    Bio TEXT,
+    Altura DECIMAL(5, 2),
+    Peso DECIMAL(5, 2),
+    ImagenUrl VARCHAR(255),
+    IdEvolucion INT,
+    FOREIGN KEY (IdEvolucion) REFERENCES Pokemons(Id) -- Autorreferencia para evolución
+);
+
+-- Tabla: Pokemons.Habilidades (Relación entre Pokemons y Habilidades)
+CREATE TABLE Pokemons_Habilidades (
+    Id INT PRIMARY KEY AUTO_INCREMENT,
+    IdPokemon INT,
+    IdHabilidad INT,
+    FOREIGN KEY (IdPokemon) REFERENCES Pokemons(Id),
+    FOREIGN KEY (IdHabilidad) REFERENCES Habilidades(Id)
+);
+
+-- Tabla: Pokemons.Tipos (Relación entre Pokemons y Elementos)
+CREATE TABLE Pokemons_Tipos (
+    Id INT PRIMARY KEY AUTO_INCREMENT,
+    IdPokemon INT,
+    IdElemento INT,
+    FOREIGN KEY (IdPokemon) REFERENCES Pokemons(Id),
+    FOREIGN KEY (IdElemento) REFERENCES Elementos(Id)
+);
+
+-- Tabla: Pokemons.Debilidades (Relación entre Pokemons y Debilidades de Elementos)
+CREATE TABLE Pokemons_Debilidades (
+    Id INT PRIMARY KEY AUTO_INCREMENT,
+    IdPokemon INT,
+    IdElemento INT,
+    FOREIGN KEY (IdPokemon) REFERENCES Pokemons(Id),
+    FOREIGN KEY (IdElemento) REFERENCES Elementos(Id)
+);
+
+-- Tabla: Entrenadores
+CREATE TABLE Entrenadores (
+    Id INT PRIMARY KEY AUTO_INCREMENT,
+    Nombre VARCHAR(100) NOT NULL,
+    Apellido VARCHAR(100),
+    NickName VARCHAR(50),
+    Email VARCHAR(100),
+    Clave VARCHAR(100),
+    FechaNacimiento DATE
+);
+
+-- Tabla: Entrenadores.Pokemons (Relación entre Entrenadores y Pokemons)
+CREATE TABLE Entrenadores_Pokemons (
+    Id INT PRIMARY KEY AUTO_INCREMENT,
+    IdEntrenador INT,
+    IdPokemon INT,
+    Nombre VARCHAR(100),
+    FOREIGN KEY (IdEntrenador) REFERENCES Entrenadores(Id),
+    FOREIGN KEY (IdPokemon) REFERENCES Pokemons(Id)
+);
+
+-- Tabla: Medallas
+CREATE TABLE Medallas (
+    Id INT PRIMARY KEY AUTO_INCREMENT,
+    Nombre VARCHAR(100) NOT NULL,
+    ImagenUrl VARCHAR(255)
+);
+
+-- Tabla: Entrenadores.Medallas (Relación entre Entrenadores y Medallas)
+CREATE TABLE Entrenadores_Medallas (
+    Id INT PRIMARY KEY AUTO_INCREMENT,
+    IdEntrenador INT,
+    IdMedalla INT,
+    FechaObtencion DATE,
+    FOREIGN KEY (IdEntrenador) REFERENCES Entrenadores(Id),
+    FOREIGN KEY (IdMedalla) REFERENCES Medallas(Id)
+);
+
+-- Tabla: Ciudades
+CREATE TABLE Ciudades (
+    Id INT PRIMARY KEY AUTO_INCREMENT,
+    Nombre VARCHAR(100) NOT NULL
+);
+
+-- Tabla: Gimnasios
+CREATE TABLE Gimnasios (
+    Id INT PRIMARY KEY AUTO_INCREMENT,
+    IdCiudad INT,
+    IdMedalla INT,
+    IdEntrenador INT,
+    FOREIGN KEY (IdCiudad) REFERENCES Ciudades(Id),
+    FOREIGN KEY (IdMedalla) REFERENCES Medallas(Id),
+    FOREIGN KEY (IdEntrenador) REFERENCES Entrenadores(Id)
+);
+
+-- Tabla: Evoluciones.Variables (Relación entre Evoluciones)
+CREATE TABLE Evoluciones_Variables (
+    Id INT PRIMARY KEY AUTO_INCREMENT,
+    IdEvolucion INT,
+    IdPokemon INT,
+    FOREIGN KEY (IdEvolucion) REFERENCES Pokemons(Id),
+    FOREIGN KEY (IdPokemon) REFERENCES Pokemons(Id)
+);
